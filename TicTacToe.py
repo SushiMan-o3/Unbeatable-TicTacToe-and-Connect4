@@ -1,20 +1,24 @@
 from __future__ import annotations
 from typing import List, Optional
+import copy
 
 class Board:
     """
     A class representing a Tic Tac Toe board.  
     """
-    def __init__(self):
+    def __init__(self, board: Optional[List[List[str]]]):
         """
         Initialize the Tic Tac Toe board with empty cells. 
         The board is represented as a 3x3 grid with each cell initialized to "."
         """
-        self.board = [
-            [".", ".", "."],
-            [".", ".", "."],
-            [".", ".", "."]
-        ]
+        if board is None or len(board) != 3:
+            self.board = [
+                [".", ".", "."],
+                [".", ".", "."],
+                [".", ".", "."]
+            ]
+        else:
+            self.board = [row.copy() for row in board]	
 
     def display(self) -> str:
         """

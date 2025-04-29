@@ -6,7 +6,7 @@ class Board:
     """
     A class representing a Tic Tac Toe board.  
     """
-    def __init__(self, board: Optional[List[List[str]]]):
+    def __init__(self, board: Optional[List[List[str]]] = None):
         """
         Initialize the Tic Tac Toe board with empty cells. 
         The board is represented as a 3x3 grid with each cell initialized to "."
@@ -99,3 +99,5 @@ class Board:
                     return False
                 
         return True
+    
+board = Board()

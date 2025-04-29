@@ -79,8 +79,6 @@ class PlayProBot(Play):
         print("Let the games begin! You will be playing as X and the bot will be playing as O. \n")
         print(self.board.display())
 
-        turns = 9
-
         while self.board.check_win() is None and not self.board.check_draw():
             move = input("Input your move in (x,y): ").split(",")
 
@@ -89,15 +87,14 @@ class PlayProBot(Play):
 
             print(f"You made the move ({move[1]}, {move[0]}). The current position of the board is: \n \n" + self.board.display() + "\n \n")
 
-            if self.board.check_win():
+            if self.board.check_win() or self.board.check_draw():
                 break 
 
-            bot_move = self.minimax(self.board.board, turns, "O")
-            turns -=1
+            bot_move = self.minimax(self.board.board, 9, "O")
 
-            self.board.make_move(bot_move[0], bot_move[1], "O")
+            self.board.make_move(bot_move[0]+1, bot_move[1]+1, "O")
 
-            print(f"The bot the move ({bot_move[1]}, {bot_move[0]}). The current position of the board is: \n \n" + self.board.display() + "\n \n")
+            print(f"The bot the move ({bot_move[1]+1}, {bot_move[0]+1}). The current position of the board is: \n \n" + self.board.display() + "\n \n")
         
         winner = self.board.check_win()
 
@@ -119,39 +116,37 @@ class PlayProBot(Play):
 
             # base cases 
             if evaluation == "X":
-                return -1
+                return -1, None
             if evaluation == "O":
-                return 1
+                return 1, None
             if temp_board.check_draw():
-                return 0
-            
+                return 0, None
+
             best_move = random.choice(temp_board.get_available_moves())
 
             if max_player == "O":
                 best_score = float("-inf")
-                opponent = "X"
             else:
                 best_score = float("inf")
-                opponent = "O"
             
             for move in temp_board.get_available_moves():
                 temp_board2 = Board(position)
-                temp_board2.make_move(move[0]+1, move[1]+1, opponent)
-                val = helper(temp_board2.board, depth-1, opponent)
+                temp_board2.make_move(move[0]+1, move[1]+1, max_player)
+                val = helper(temp_board2.board, depth-1, "X" if max_player == "O" else "O")
 
                 if max_player == "O":
-                    if val > best_score:
-                        best_score = val
+                    if val[0] > best_score:
+                        best_score = val[0]
                         best_move = move
                 else:
-                    if val > best_score:
-                        best_score = val
+                    if val[0] < best_score:
+                        best_score = val[0]
                         best_move = move
 
-            return best_move
+            return best_score, best_move
                 
-        return helper(position, depth, max_player)
+        return helper(position, depth, max_player)[1]
         
-
-g = PlayDumbassBot()
+1,2
+g = PlayProBot()
 g.start()

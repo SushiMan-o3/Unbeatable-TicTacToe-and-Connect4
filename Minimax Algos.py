@@ -208,7 +208,7 @@ class PlayStupidBot(PlayConnect4):
         return random.choice(self.board.get_available_moves())
 
 
-class PlayStupidBot(PlayConnect4):
+class PlayGenuis(PlayConnect4):
     """
     A class representing a Connect 4 game with a stupid bot."""
     def __init__(self):
@@ -236,9 +236,9 @@ class PlayStupidBot(PlayConnect4):
                 break 
 
             bot_move = self.minimax(self.board.board, 7, 2)
-            self.board.drop_disc(bot_move, 2)
+            self.board.drop_disc(bot_move+1, 2)
 
-            print(f"The bot dropped it at {bot_move}. The current position of the board is: \n \n")
+            print(f"The bot dropped it at {bot_move+1}. The current position of the board is: \n \n")
             print(self.board)
         
         winner = self.board.check_win()
@@ -249,7 +249,7 @@ class PlayStupidBot(PlayConnect4):
             print("The following game ended in a draw!")
     
 
-    def minimax(self, position: List[List[str]], depth: int, max_player: str) -> tuple[int, int]:
+    def minimax(self, position: List[List[str]], depth: int, max_player: str) -> int:
         """
         Pick a random move from the available moves on the board.
         Returns a column representing the move.
@@ -263,7 +263,7 @@ class PlayStupidBot(PlayConnect4):
                 return -1, None
             if evaluation == 2:
                 return 1, None
-            if temp_board.check_draw():
+            if temp_board.check_draw() or depth == 0:
                 return 0, None
 
             best_move = random.choice(temp_board.get_available_moves())
@@ -290,5 +290,5 @@ class PlayStupidBot(PlayConnect4):
             return best_score, best_move
         return helper(position, depth, max_player)[1]
     
-g = PlayStupidBot()
+g = PlayGenuis()
 g.start()

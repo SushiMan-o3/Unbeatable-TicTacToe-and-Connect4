@@ -3,6 +3,7 @@ from typing import List, Optional
 from TicTacToe import Board
 import random
 from Connect4 import Connect4
+import json 
 
 class PlayTicacToe:
     """
@@ -254,7 +255,12 @@ class PlayGenuis(PlayConnect4):
         Pick a random move from the available moves on the board.
         Returns a column representing the move.
         """
-        def helper(position: List[List[str]], depth: int, max_player: str):
+        def helper(position: List[List[str]], depth: int, alpha, beta, max_player: str):
+            with open('data.json', 'r') as file:
+                data = json.load(file)
+                if self.board.serialize() in data:
+                    return data[self.board.serialize()]
+
             temp_board = Connect4(position)
             evaluation = temp_board.check_win()
 
@@ -275,20 +281,28 @@ class PlayGenuis(PlayConnect4):
             
             for move in temp_board.get_available_moves():
                 temp_board2 = Connect4(position)
-                temp_board2.drop_disc(move, max_player)
-                val = helper(temp_board2.board, depth-1, 1 if max_player == 2 else 2)
+                temp_board2.drop_disc(move+1, max_player)
+                val = helper(temp_board2.board, depth-1, alpha, beta, 1 if max_player == 2 else 2)
 
                 if max_player == 2:
                     if val[0] > best_score:
                         best_score = val[0]
                         best_move = move
+
+                    alpha = max(alpha, best_score)
+                    if beta <= alpha:
+                        break
                 else:
                     if val[0] < best_score:
                         best_score = val[0]
                         best_move = move
 
+                    beta = min(beta, best_score)
+                    if beta <= alpha:
+                        break
+
             return best_score, best_move
-        return helper(position, depth, max_player)[1]
+        return helper(position, depth, float('-inf'), float('inf'), max_player)[1]
     
 g = PlayGenuis()
 g.start()

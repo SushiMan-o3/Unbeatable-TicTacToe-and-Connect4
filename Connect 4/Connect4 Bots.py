@@ -63,7 +63,7 @@ class PlayStupidBot(PlayConnect4):
         return random.choice(self.board.get_available_moves())
 
 
-class PlayGenuis(PlayConnect4):
+class PlayPro(PlayConnect4):
     """
     A class representing a Connect 4 game with a stupid bot."""
     def __init__(self):
@@ -160,5 +160,3 @@ class PlayGenuis(PlayConnect4):
 
         return helper(position, depth, float('-inf'), float('inf'), max_player)[1]
 
-g = PlayGenuis()
-g.start()

@@ -123,6 +123,7 @@ class Connect4:
         
         return lst
     
+    
 def evaluate_board(board: Connect4, player: int) -> int:
     """
     Evaluate the board for the given player. The evaluation is based on the number of 
